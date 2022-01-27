@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="dist/css/styles.css" />
+    <script type = "text/javascript" language = "JavaScript">
+        var insertedNumber;
+        var outPut;
+        var digits
+        var litera = hundreds = tens = units = minus = "";
+        var k = 0, i, j;
+
+        N = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+            '', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen',
+            '', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety',
+            '', 'hundred', 'two hundred', 'three hundred', 'four hundred', 'five hundred', 'six hundred', 'seven hundred', 'eight hundred', 'nine hundred',
+            'thousands', 'thousand', 'thousands', 'thousands', 'thousands', 'thousands', 'thousands', 'thousands', 'thousands', 'thousands',
+            'millions', 'million', 'millions', 'millions', 'millions', 'millions', 'millions', 'millions', 'millions', 'millions',
+            'milliards', 'milliard', 'milliards', 'milliards', 'milliards', 'milliards', 'milliards', 'milliards', 'milliards', 'milliards'];
+
+        var M = new Array(10);
+        for (j = 0; j < 10; ++j)
+            M[j] = new Array(N.length);
+
+        for (i = 0; i < N.length; i++)
+            for (j = 0; j < 10; j++)
+                M[j][i] = N[k++]
+
+
+        function num2str(insertedNumber, target) {
+            digits = "";
+            insertedNumber = insertedNumber.replace(",", ".");
+
+            if (isNaN(insertedNumber)) {
+                document.getElementById(target).innerHTML = "Not a number";
+                return
+            }
+            if (insertedNumber.substr(0, 1) == "-") {
+                insertedNumber = insertedNumber.substr(1);
+                minus = "minus"
+            }
+            else minus = "";
+            insertedNumber = Math.round(insertedNumber * 100) / 100 + "";
+
+            if (insertedNumber.indexOf(".") != -1) {
+                digits = insertedNumber.substr(0, insertedNumber.indexOf("."));
+            }
+            else digits = insertedNumber;
+
+            if (digits.length > 12) {
+                document.getElementById(target).innerHTML = "The number is too big";
+                return
+            }
+
+            var tempNum = cursive(outPut = digits);
+            var res;
+            tempNum !== "zero"  ? res = tempNum : 0;
+
+            document.getElementById(target).innerHTML = (minus + res).substr(0, 1).toUpperCase() + (minus + res).substr(1);
+        }
+
+        function cursive(outPut) {
+            litera = "";
+            var litera = hundreds = tens = units = minus = "";
+            for (i = 0; i < outPut.length; i += 3) {
+                if (n(i + 2, 2) > 10 && n(i + 2, 2) < 20) {
+                    units = " " + M[n(i + 1, 1)][1] + " " + M[0][i / 3 + 3];
+                    i === 0 ? units : 0;
+                }
+                else {
+                    units = M[n(i + 1, 1)][0];
+                    (units === "one" && (i === 3 )) ? units = "one" : 0;
+                    (units === "two" && (i === 3 )) ? units = "two" : 0;
+                    i === 0 && units !== "" ? 0 : units += " " + M[n(i + 1, 1)][i / 3 + 3];
+                    units === " " ? units = "" : (units === " " + M[n(i + 1, 1)][i / 3 + 3]) ? 0 : units = " " + units;
+                    i === 0 ? units += " " + n(i + 1, 1) : 0;
+                    (tens = M[n(i + 2, 1)][2]) !== "" ? tens = " " + tens : 0;
+                }
+                (hundreds = M[n(i + 3, 1)][3]) !== "" ? hundreds = " " + hundreds : 0;
+                if (outPut.substr(outPut.length - i - 3, 3) === "000" && units === " " + M[0][i / 3 + 3]) units = "";
+                litera = hundreds + tens + units + litera;
+
+                console.log(outPut)
+            }
+           return litera.substr(1);
+        }
+
+        function n(start, len) {
+            if (start > outPut.length) return 0;
+            else return Number(outPut.substr(outPut.length - start, len));
+        }
+
+    </script>
+</head>
+<body>
+<input type="text" onKeyUp="num2str(this.value, 'str')"/>
+<div id="str"></div>
+</body>
+</html>
